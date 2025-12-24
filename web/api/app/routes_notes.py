@@ -67,27 +67,6 @@ async def update_note(
     return db_note
 
 @router.delete("/{note_id}")
-async def delete_note(
-    note_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    """Delete a note"""
-    db_note = db.query(Note).join(Project).filter(
-        Note.id == note_id,
-        Project.owner_id == current_user.id
-    ).first()
-    if not db_note:
-        raise HTTPException(status_code=404, detail="Note not found")
-    
-    for key, value in note_update.dict(exclude_unset=True).items():
-        setattr(db_note, key, value)
-    
-    db.commit()
-    db.refresh(db_note)
-    return db_note
-
-@router.delete("/{note_id}")
 async def delete_note(note_id: int, db: Session = Depends(get_db)):
     """Delete a note"""
     db_note = db.query(Note).filter(Note.id == note_id).first()

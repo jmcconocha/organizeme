@@ -133,7 +133,8 @@ class Task(TaskBase):
 
 # Scan schemas
 class ScanBase(BaseModel):
-    scan_path: str
+    path: str
+    max_depth: Optional[int] = 3
 
 class ScanCreate(ScanBase):
     pass

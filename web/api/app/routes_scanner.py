@@ -9,7 +9,7 @@ import os
 from app.database import get_db
 from app.schemas import ScanCreate, Scan, ScanResult, ProjectCreate, Project
 from app.models import Scan as ScanModel, Project as ProjectModel
-from app.worker.scanner import scan_directory
+from worker.scanner import scan_directory
 
 router = APIRouter(prefix="/api/scanner", tags=["scanner"])
 
