@@ -38,7 +38,11 @@ async def ready():
     """Readiness check: verify DB connectivity"""
     try:
         db_path = os.getenv("DATABASE_URL", "sqlite:////app/data/ppm.db")
-        db_file = db_path.replace("sqlite:////", "")
+        # Handle both sqlite://// and file paths
+        if db_path.startswith("sqlite://"):
+            db_file = db_path.replace("sqlite:///", "")
+        else:
+            db_file = db_path
         conn = sqlite3.connect(db_file)
         conn.execute("SELECT 1")
         conn.close()

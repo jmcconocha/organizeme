@@ -1,5 +1,6 @@
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthCredentials
+from fastapi.security import HTTPBearer
+from starlette.requests import Request
 from app.security import verify_token
 from sqlalchemy.orm import Session
 from app.database import get_db
@@ -8,11 +9,20 @@ from app.models import User
 security = HTTPBearer()
 
 async def get_current_user(
-    credentials: HTTPAuthCredentials = Depends(security),
+    request: Request,
     db: Session = Depends(get_db)
 ) -> User:
-    """Extract and verify JWT token, return current user"""
-    token = credentials.credentials
+    """Extract and verify JWT token from Authorization header, return current user"""
+    auth_header = request.headers.get("authorization")
+    
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing or invalid authorization header",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    token = auth_header.split(" ")[1]
     payload = verify_token(token)
     
     if not payload:
