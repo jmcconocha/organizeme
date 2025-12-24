@@ -42,6 +42,8 @@ def upgrade():
                 batch_op.add_column(sa.Column('status', sa.String(), nullable=False, server_default='backlog'))
             if 'position' not in projects_cols:
                 batch_op.add_column(sa.Column('position', sa.Integer(), nullable=False, server_default='0'))
+            if 'description' not in projects_cols:
+                batch_op.add_column(sa.Column('description', sa.Text(), nullable=True))
     
     # Remove owner_id from repositories if it exists
     if 'repositories' in existing_tables:
@@ -79,10 +81,13 @@ def upgrade():
         op.create_table(
             'scans',
             sa.Column('id', sa.Integer(), nullable=False),
-            sa.Column('path', sa.String(), nullable=False),
-            sa.Column('max_depth', sa.Integer(), nullable=False),
-            sa.Column('results_count', sa.Integer(), nullable=False),
-            sa.Column('created_at', sa.DateTime(), nullable=False),
+            sa.Column('scan_path', sa.String(), nullable=False),
+            sa.Column('projects_found', sa.Integer(), nullable=False, server_default='0'),
+            sa.Column('projects_imported', sa.Integer(), nullable=False, server_default='0'),
+            sa.Column('status', sa.String(), nullable=False, server_default='pending'),
+            sa.Column('error_message', sa.Text(), nullable=True),
+            sa.Column('started_at', sa.DateTime(), nullable=False),
+            sa.Column('completed_at', sa.DateTime(), nullable=True),
             sa.PrimaryKeyConstraint('id')
         )
     

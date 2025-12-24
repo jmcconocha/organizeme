@@ -15,6 +15,7 @@ class Project(Base):
     complexity = Column(String, nullable=True)  # low, medium, high, very_high
     tags = Column(Text, nullable=True)  # comma-separated tags
     visibility = Column(String, default="private")  # private, team, public
+    description = Column(Text, nullable=True)  # Project description
     
     # New fields for local scanning
     local_path = Column(String, nullable=True)  # Path to local git repo
