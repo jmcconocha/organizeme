@@ -5,6 +5,8 @@ from app.routes_auth import router as auth_router
 from app.routes_projects import router as projects_router
 from app.routes_notes import router as notes_router
 from app.routes_repositories import router as repositories_router
+from app.routes_github import router as github_router
+from app.scheduler import start_scheduler, stop_scheduler
 import os
 import sqlite3
 
@@ -28,6 +30,17 @@ app.include_router(auth_router)
 app.include_router(projects_router)
 app.include_router(notes_router)
 app.include_router(repositories_router)
+app.include_router(github_router)
+
+
+@app.on_event("startup")
+async def startup_event():
+    start_scheduler()
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    stop_scheduler()
 
 # Health check endpoints
 @app.get("/healthz")

@@ -83,3 +83,45 @@
   border-radius: 4px;
   margin-bottom: 20px;
 }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-secondary {
+  padding: 8px 14px;
+  background: #1f8ef1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary:hover:enabled {
+  background: #1876c9;
+}
+
+.github-connected {
+  padding: 8px 12px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.notice-banner {
+  background: #e3f2fd;
+  color: #0d47a1;
+  padding: 12px 20px;
+  margin: 12px 20px 0 20px;
+  border-radius: 6px;
+  border: 1px solid #bbdefb;
+}

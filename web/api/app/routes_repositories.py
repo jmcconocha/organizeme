@@ -7,10 +7,17 @@ from app.models import Repository, Project, User, Activity
 from app.schemas import Repository as RepositorySchema, RepositoryCreate, Activity as ActivitySchema
 from app.dependencies import get_current_user
 from app.github_client import GitHubClient, parse_repo_full_name
+from app.security import decrypt_token
+from app.services_sync import sync_repository
 from datetime import datetime, timedelta
 from typing import List
 
 router = APIRouter(prefix="/api/repositories", tags=["repositories"])
+
+
+def _github_client_for(user: User) -> GitHubClient:
+    """Return a GitHub client using the user's token if configured."""
+    return GitHubClient(token=decrypt_token(user.github_token))
 
 @router.post("", response_model=RepositorySchema)
 async def link_repository(
@@ -34,7 +41,7 @@ async def link_repository(
         raise HTTPException(status_code=400, detail=str(e))
     
     # Fetch repo info from GitHub
-    github = GitHubClient()
+    github = _github_client_for(current_user)
     repo_info = await github.get_repository(owner, repo_name)
     if not repo_info:
         raise HTTPException(status_code=404, detail="Repository not found on GitHub")
@@ -118,95 +125,7 @@ async def sync_repository(
     if not repo:
         raise HTTPException(status_code=404, detail="Repository not found")
     
-    owner, repo_name = parse_repo_full_name(repo.full_name)
-    github = GitHubClient()
-    
-    # Sync commits (last 7 days)
-    commits = await github.get_repository_commits(
-        owner, repo_name,
-        since=datetime.utcnow() - timedelta(days=7)
-    )
-    if commits:
-        for commit in commits:
-            # Check if activity already exists
-            existing = db.query(Activity).filter(
-                Activity.repository_id == repo_id,
-                Activity.activity_type == "commit",
-                Activity.url == commit["html_url"]
-            ).first()
-            if not existing:
-                activity = Activity(
-                    project_id=repo.project_id,
-                    repository_id=repo_id,
-                    activity_type="commit",
-                    title=commit["commit"]["message"].split("\n")[0],
-                    description=commit["commit"]["message"],
-                    url=commit["html_url"],
-                    author=commit["commit"]["author"]["name"],
-                    timestamp=datetime.fromisoformat(
-                        commit["commit"]["author"]["date"].replace("Z", "+00:00")
-                    )
-                )
-                db.add(activity)
-    
-    # Sync PRs
-    pulls = await github.get_repository_pulls(owner, repo_name, state="all")
-    if pulls:
-        for pr in pulls:
-            existing = db.query(Activity).filter(
-                Activity.repository_id == repo_id,
-                Activity.activity_type == "pull_request",
-                Activity.url == pr["html_url"]
-            ).first()
-            if not existing:
-                activity = Activity(
-                    project_id=repo.project_id,
-                    repository_id=repo_id,
-                    activity_type="pull_request",
-                    title=pr["title"],
-                    description=pr.get("body"),
-                    url=pr["html_url"],
-                    author=pr["user"]["login"],
-                    timestamp=datetime.fromisoformat(
-                        pr["created_at"].replace("Z", "+00:00")
-                    )
-                )
-                db.add(activity)
-    
-    # Sync releases
-    releases = await github.get_repository_releases(owner, repo_name)
-    if releases:
-        for release in releases:
-            existing = db.query(Activity).filter(
-                Activity.repository_id == repo_id,
-                Activity.activity_type == "release",
-                Activity.url == release["html_url"]
-            ).first()
-            if not existing:
-                activity = Activity(
-                    project_id=repo.project_id,
-                    repository_id=repo_id,
-                    activity_type="release",
-                    title=release["name"] or release["tag_name"],
-                    description=release.get("body"),
-                    url=release["html_url"],
-                    author=release["author"]["login"],
-                    timestamp=datetime.fromisoformat(
-                        release["published_at"].replace("Z", "+00:00")
-                    )
-                )
-                db.add(activity)
-    
-    # Update repository metadata
-    repo_info = await github.get_repository(owner, repo_name)
-    if repo_info:
-        repo.stars = repo_info.get("stargazers_count", 0)
-        repo.forks = repo_info.get("forks_count", 0)
-        repo.open_issues = repo_info.get("open_issues_count", 0)
-    
-    repo.last_synced = datetime.utcnow()
-    db.commit()
-    db.refresh(repo)
+    await sync_repository(db, repo, current_user)
     return {"synced": True, "repository": repo}
 
 @router.get("/{repo_id}/activities", response_model=List[ActivitySchema])
