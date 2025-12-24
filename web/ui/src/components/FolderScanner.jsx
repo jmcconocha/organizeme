@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import '../styles/FolderScanner.css'
 
 function FolderScanner({ onImportComplete }) {
-  const [scanPath, setScanPath] = useState('')
+  const [scanPath, setScanPath] = useState('/host/Projects')
   const [maxDepth, setMaxDepth] = useState(3)
   const [scanning, setScanning] = useState(false)
   const [scanResults, setScanResults] = useState(null)
   const [selectedRepos, setSelectedRepos] = useState(new Set())
   const [importing, setImporting] = useState(false)
   const [error, setError] = useState('')
+  const [showPathHelp, setShowPathHelp] = useState(false)
 
   const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
@@ -127,9 +128,13 @@ function FolderScanner({ onImportComplete }) {
             type="text"
             value={scanPath}
             onChange={(e) => setScanPath(e.target.value)}
-            placeholder="/Users/username/Projects"
+            placeholder="/host/Projects"
             disabled={scanning}
           />
+          <small>
+            Use <strong>/host/Projects</strong> to scan your ~/Documents/Projects folder, 
+            or <strong>/host/</strong> for other directories
+          </small>
         </div>
 
         <div className="form-group">

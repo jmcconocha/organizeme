@@ -17,6 +17,7 @@ services:
       - ./data:/app/data
       - ./web/api/app:/app/app
       - ./web/api/alembic:/app/alembic
+      - ~/Documents/Projects:/host/Projects
     ports:
       - "8000:8000"
     healthcheck:
@@ -44,6 +45,7 @@ services:
       - ./data:/app/data
       - ./web/api/app:/app/app
       - ./web/api/worker:/app/worker
+      - ~/Documents/Projects:/host/Projects
     depends_on:
       api:
         condition: service_healthy
