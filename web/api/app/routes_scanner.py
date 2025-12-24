@@ -37,9 +37,10 @@ async def trigger_scan(
     
     # Create scan record
     scan_record = ScanModel(
-        path=scan_data.path,
-        max_depth=scan_data.max_depth or 3,
-        results_count=len(discovered_repos)
+        scan_path=scan_data.path,
+        projects_found=len(discovered_repos),
+        projects_imported=0,
+        status="completed"
     )
     db.add(scan_record)
     db.commit()
@@ -47,10 +48,10 @@ async def trigger_scan(
     
     return ScanResult(
         scan_id=scan_record.id,
-        path=scan_record.path,
-        results_count=scan_record.results_count,
+        path=scan_record.scan_path,
+        results_count=scan_record.projects_found,
         discovered_repos=discovered_repos,
-        created_at=scan_record.created_at
+        created_at=scan_record.started_at
     )
 
 
@@ -64,7 +65,7 @@ async def list_scans(
     List all folder scan history
     """
     scans = db.query(ScanModel).order_by(
-        ScanModel.created_at.desc()
+        ScanModel.started_at.desc()
     ).offset(skip).limit(limit).all()
     
     return scans

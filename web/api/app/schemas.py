@@ -140,14 +140,15 @@ class ScanCreate(ScanBase):
     pass
 
 class ScanResult(BaseModel):
-    name: str
+    scan_id: int
     path: str
-    remote_url: Optional[str] = None
-    tech_stack: Dict[str, Any]
-    current_branch: Optional[str] = None
+    results_count: int
+    discovered_repos: List[Dict[str, Any]] = []
+    created_at: datetime
 
-class Scan(ScanBase):
+class Scan(BaseModel):
     id: int
+    scan_path: str
     projects_found: int
     projects_imported: int
     status: str
