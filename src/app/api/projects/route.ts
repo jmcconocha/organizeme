@@ -44,6 +44,7 @@ import type { ProjectListResponse, ProjectErrorResponse } from '@/types/project'
  * }
  * ```
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(_request: NextRequest): Promise<NextResponse<ProjectListResponse | ProjectErrorResponse>> {
   try {
     // Scan the projects directory
