@@ -225,3 +225,68 @@ export async function enrichProjectsWithGitInfo<T extends { path: string; gitInf
 
   return enrichedProjects
 }
+
+/**
+ * Result of getting Git remote URL.
+ */
+export interface GitRemoteUrlResult {
+  url: string | null
+  error?: string
+}
+
+/**
+ * Extracts the GitHub URL from a Git repository's remote.
+ *
+ * This function attempts to find the 'origin' remote URL and converts
+ * SSH URLs to HTTPS URLs for browser opening.
+ *
+ * @param projectPath - Path to the Git repository
+ * @returns Promise resolving to the GitHub URL or null if not available
+ *
+ * @example
+ * ```typescript
+ * const result = await getGitRemoteUrl('/path/to/project')
+ * if (result.url) {
+ *   console.log(`GitHub URL: ${result.url}`)
+ * }
+ * ```
+ */
+export async function getGitRemoteUrl(projectPath: string): Promise<GitRemoteUrlResult> {
+  try {
+    const git: SimpleGit = simpleGit(projectPath)
+
+    // Check if it's a repo first
+    const isRepo = await git.checkIsRepo()
+    if (!isRepo) {
+      return { url: null, error: 'Not a Git repository' }
+    }
+
+    // Get remotes
+    const remotes = await git.getRemotes(true)
+
+    // Find origin or the first remote
+    const origin = remotes.find(r => r.name === 'origin') || remotes[0]
+
+    if (!origin || !origin.refs.fetch) {
+      return { url: null, error: 'No remote found' }
+    }
+
+    let remoteUrl = origin.refs.fetch
+
+    // Convert SSH URL to HTTPS URL if needed
+    // git@github.com:user/repo.git -> https://github.com/user/repo
+    if (remoteUrl.startsWith('git@')) {
+      remoteUrl = remoteUrl
+        .replace(/^git@([^:]+):/, 'https://$1/')
+        .replace(/\.git$/, '')
+    } else if (remoteUrl.startsWith('https://') || remoteUrl.startsWith('http://')) {
+      // Remove .git suffix if present
+      remoteUrl = remoteUrl.replace(/\.git$/, '')
+    }
+
+    return { url: remoteUrl }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return { url: null, error: `Failed to get remote URL: ${errorMessage}` }
+  }
+}

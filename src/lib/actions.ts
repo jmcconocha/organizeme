@@ -225,3 +225,144 @@ export async function openInFinder(projectPath: string): Promise<OpenInFinderRes
     }
   }
 }
+
+/**
+ * Result of opening a project in an application.
+ */
+export interface OpenInAppResult {
+  success: boolean
+  message: string
+}
+
+/**
+ * Opens a project directory in the system's default terminal.
+ *
+ * This server action uses the system's native terminal application:
+ * - macOS: Terminal.app
+ * - Windows: cmd.exe
+ * - Linux: x-terminal-emulator or gnome-terminal
+ *
+ * @param projectPath - The full filesystem path to the project directory
+ * @returns Promise resolving to OpenInAppResult
+ */
+export async function openInTerminal(projectPath: string): Promise<OpenInAppResult> {
+  try {
+    // Validate path exists
+    const { access } = await import('fs/promises')
+    await access(projectPath)
+
+    // Use child_process to open terminal
+    const { exec } = await import('child_process')
+    const { promisify } = await import('util')
+    const execAsync = promisify(exec)
+
+    // Determine the command based on platform
+    const platform = process.platform
+    let command: string
+
+    if (platform === 'darwin') {
+      // macOS: use 'open' command with Terminal.app
+      command = `open -a Terminal "${projectPath}"`
+    } else if (platform === 'win32') {
+      // Windows: use 'start cmd' command
+      command = `start cmd /K "cd /d ${projectPath}"`
+    } else {
+      // Linux: try common terminal emulators
+      command = `x-terminal-emulator --working-directory="${projectPath}" || gnome-terminal --working-directory="${projectPath}" || xterm -e "cd '${projectPath}' && $SHELL"`
+    }
+
+    await execAsync(command)
+
+    return {
+      success: true,
+      message: `Opened ${projectPath} in terminal`,
+    }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+
+    return {
+      success: false,
+      message: `Failed to open in terminal: ${errorMessage}`,
+    }
+  }
+}
+
+/**
+ * Opens a project directory in Visual Studio Code.
+ *
+ * This server action uses the 'code' CLI command which must be installed
+ * and available in the system PATH.
+ *
+ * @param projectPath - The full filesystem path to the project directory
+ * @returns Promise resolving to OpenInAppResult
+ */
+export async function openInVSCode(projectPath: string): Promise<OpenInAppResult> {
+  try {
+    // Validate path exists
+    const { access } = await import('fs/promises')
+    await access(projectPath)
+
+    // Use child_process to open VS Code
+    const { exec } = await import('child_process')
+    const { promisify } = await import('util')
+    const execAsync = promisify(exec)
+
+    // Use 'code' command (works on all platforms if VS Code is installed)
+    const command = `code "${projectPath}"`
+
+    await execAsync(command)
+
+    return {
+      success: true,
+      message: `Opened ${projectPath} in VS Code`,
+    }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+
+    return {
+      success: false,
+      message: `Failed to open in VS Code: ${errorMessage}`,
+    }
+  }
+}
+
+/**
+ * Opens a URL in the default browser.
+ *
+ * @param url - The URL to open
+ * @returns Promise resolving to OpenInAppResult
+ */
+export async function openInBrowser(url: string): Promise<OpenInAppResult> {
+  try {
+    // Use child_process to open the URL
+    const { exec } = await import('child_process')
+    const { promisify } = await import('util')
+    const execAsync = promisify(exec)
+
+    // Determine the command based on platform
+    const platform = process.platform
+    let command: string
+
+    if (platform === 'darwin') {
+      command = `open "${url}"`
+    } else if (platform === 'win32') {
+      command = `start "" "${url}"`
+    } else {
+      command = `xdg-open "${url}"`
+    }
+
+    await execAsync(command)
+
+    return {
+      success: true,
+      message: `Opened ${url} in browser`,
+    }
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+
+    return {
+      success: false,
+      message: `Failed to open in browser: ${errorMessage}`,
+    }
+  }
+}

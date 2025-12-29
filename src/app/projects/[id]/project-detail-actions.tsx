@@ -5,13 +5,16 @@
  *
  * Client component that handles interactive actions for the project detail page:
  * - Open in Finder button
+ * - Open in Terminal button
+ * - Open in VS Code button
+ * - Open in GitHub button (if remote URL available)
  * - Refresh button
  */
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
 
-import { openInFinder, refreshProject } from "@/lib/actions"
+import { openInFinder, openInTerminal, openInVSCode, openInBrowser, refreshProject } from "@/lib/actions"
 import { Button } from "@/components/ui/button"
 
 export interface ProjectDetailActionsProps {
@@ -19,6 +22,8 @@ export interface ProjectDetailActionsProps {
   projectPath: string
   /** The project ID for refresh */
   projectId: string
+  /** Optional GitHub/remote URL for the project */
+  gitRemoteUrl?: string | null
 }
 
 /**
@@ -68,6 +73,73 @@ function RefreshIcon({ className }: { className?: string }) {
 }
 
 /**
+ * Terminal icon.
+ */
+function TerminalIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="2"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z"
+      />
+    </svg>
+  )
+}
+
+/**
+ * VS Code icon.
+ */
+function VSCodeIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="2"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"
+      />
+    </svg>
+  )
+}
+
+/**
+ * GitHub icon.
+ */
+function GitHubIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+/**
  * ProjectDetailActions component.
  *
  * Provides action buttons for the project detail page.
@@ -75,9 +147,13 @@ function RefreshIcon({ className }: { className?: string }) {
 export function ProjectDetailActions({
   projectPath,
   projectId,
+  gitRemoteUrl,
 }: ProjectDetailActionsProps) {
   const router = useRouter()
   const [isOpening, setIsOpening] = React.useState(false)
+  const [isOpeningTerminal, setIsOpeningTerminal] = React.useState(false)
+  const [isOpeningVSCode, setIsOpeningVSCode] = React.useState(false)
+  const [isOpeningGitHub, setIsOpeningGitHub] = React.useState(false)
   const [isRefreshing, setIsRefreshing] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
 
@@ -97,6 +173,59 @@ export function ProjectDetailActions({
       setIsOpening(false)
     }
   }, [projectPath])
+
+  const handleOpenInTerminal = React.useCallback(async () => {
+    setIsOpeningTerminal(true)
+    setError(null)
+
+    try {
+      const result = await openInTerminal(projectPath)
+
+      if (!result.success) {
+        setError(result.message)
+      }
+    } catch {
+      setError("Failed to open in Terminal")
+    } finally {
+      setIsOpeningTerminal(false)
+    }
+  }, [projectPath])
+
+  const handleOpenInVSCode = React.useCallback(async () => {
+    setIsOpeningVSCode(true)
+    setError(null)
+
+    try {
+      const result = await openInVSCode(projectPath)
+
+      if (!result.success) {
+        setError(result.message)
+      }
+    } catch {
+      setError("Failed to open in VS Code")
+    } finally {
+      setIsOpeningVSCode(false)
+    }
+  }, [projectPath])
+
+  const handleOpenInGitHub = React.useCallback(async () => {
+    if (!gitRemoteUrl) return
+
+    setIsOpeningGitHub(true)
+    setError(null)
+
+    try {
+      const result = await openInBrowser(gitRemoteUrl)
+
+      if (!result.success) {
+        setError(result.message)
+      }
+    } catch {
+      setError("Failed to open in browser")
+    } finally {
+      setIsOpeningGitHub(false)
+    }
+  }, [gitRemoteUrl])
 
   const handleRefresh = React.useCallback(async () => {
     setIsRefreshing(true)
@@ -129,10 +258,66 @@ export function ProjectDetailActions({
           ) : (
             <>
               <FolderOpenIcon className="h-4 w-4" />
-              Open in Finder
+              Finder
             </>
           )}
         </Button>
+        <Button
+          onClick={handleOpenInTerminal}
+          disabled={isOpeningTerminal}
+          variant="default"
+          size="default"
+        >
+          {isOpeningTerminal ? (
+            <>
+              <LoadingSpinner className="h-4 w-4 animate-spin" />
+              Opening...
+            </>
+          ) : (
+            <>
+              <TerminalIcon className="h-4 w-4" />
+              Terminal
+            </>
+          )}
+        </Button>
+        <Button
+          onClick={handleOpenInVSCode}
+          disabled={isOpeningVSCode}
+          variant="default"
+          size="default"
+        >
+          {isOpeningVSCode ? (
+            <>
+              <LoadingSpinner className="h-4 w-4 animate-spin" />
+              Opening...
+            </>
+          ) : (
+            <>
+              <VSCodeIcon className="h-4 w-4" />
+              VS Code
+            </>
+          )}
+        </Button>
+        {gitRemoteUrl && (
+          <Button
+            onClick={handleOpenInGitHub}
+            disabled={isOpeningGitHub}
+            variant="default"
+            size="default"
+          >
+            {isOpeningGitHub ? (
+              <>
+                <LoadingSpinner className="h-4 w-4 animate-spin" />
+                Opening...
+              </>
+            ) : (
+              <>
+                <GitHubIcon className="h-4 w-4" />
+                GitHub
+              </>
+            )}
+          </Button>
+        )}
         <Button
           onClick={handleRefresh}
           disabled={isRefreshing}

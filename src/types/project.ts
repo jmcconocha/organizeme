@@ -60,6 +60,10 @@ export interface Project {
   hasPackageJson: boolean
   /** Whether the project contains a README file */
   hasReadme: boolean
+  /** README file content for display in detail view */
+  readmeContent?: string | null
+  /** Remote repository URL (GitHub, GitLab, etc.) */
+  gitRemoteUrl?: string | null
 }
 
 /**

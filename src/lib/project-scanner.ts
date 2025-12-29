@@ -341,3 +341,55 @@ export function filterSuccessfulScans(results: ScanResult[]): Project[] {
 export function filterScanErrors(results: ScanResult[]): ProjectScanError[] {
   return results.filter((r): r is ProjectScanError => 'error' in r && r.error !== undefined)
 }
+
+/**
+ * README file names to search for, in order of preference.
+ */
+const README_FILES = ['README.md', 'README.txt', 'README', 'readme.md', 'Readme.md']
+
+/**
+ * Maximum length of README content to return (to avoid huge payloads).
+ */
+const MAX_README_LENGTH = 50000
+
+/**
+ * Reads the README content from a project directory.
+ *
+ * This function searches for common README file variants and returns
+ * the content of the first one found.
+ *
+ * @param projectPath - Full path to the project directory
+ * @returns Promise resolving to README content or null if not found
+ *
+ * @example
+ * ```typescript
+ * const content = await getReadmeContent('/path/to/project')
+ * if (content) {
+ *   console.log(content)
+ * }
+ * ```
+ */
+export async function getReadmeContent(projectPath: string): Promise<string | null> {
+  const { readFile } = await import('fs/promises')
+
+  for (const fileName of README_FILES) {
+    try {
+      const filePath = join(projectPath, fileName)
+      const exists = await fileExists(filePath)
+
+      if (exists) {
+        const content = await readFile(filePath, 'utf-8')
+        // Truncate if too large
+        if (content.length > MAX_README_LENGTH) {
+          return content.slice(0, MAX_README_LENGTH) + '\n\n... (truncated)'
+        }
+        return content
+      }
+    } catch {
+      // Continue to next file
+      continue
+    }
+  }
+
+  return null
+}
