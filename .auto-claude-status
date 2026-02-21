@@ -1,25 +1,25 @@
 {
   "active": true,
-  "spec": "002-sorting-options",
-  "state": "building",
+  "spec": "005-project-tags-categories",
+  "state": "planning",
   "subtasks": {
-    "completed": 4,
-    "total": 5,
+    "completed": 0,
+    "total": 0,
     "in_progress": 1,
     "failed": 0
   },
   "phase": {
-    "current": "End-to-End Verification",
+    "current": "Data Model & Storage",
     "id": null,
-    "total": 1
+    "total": 3
   },
   "workers": {
     "active": 0,
     "max": 1
   },
   "session": {
-    "number": 6,
-    "started_at": "2026-02-21T11:37:22.683045"
+    "number": 2,
+    "started_at": "2026-02-21T17:04:45.933442"
   },
-  "last_update": "2026-02-21T11:48:54.465898"
+  "last_update": "2026-02-21T17:08:25.762968"
 }

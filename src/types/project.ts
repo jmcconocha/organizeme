@@ -64,6 +64,8 @@ export interface Project {
   readmeContent?: string | null
   /** Remote repository URL (GitHub, GitLab, etc.) */
   gitRemoteUrl?: string | null
+  /** Array of tags for categorizing and organizing projects */
+  tags?: string[]
 }
 
 /**
@@ -78,6 +80,8 @@ export interface ProjectSummary {
   hasGit: boolean
   branch?: string
   isDirty?: boolean
+  /** Array of tags for categorizing and organizing projects */
+  tags?: string[]
 }
 
 /**
