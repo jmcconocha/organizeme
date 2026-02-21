@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { StatusBadge } from "@/components/status-badge"
 
 /**
@@ -194,6 +195,19 @@ const ProjectCard = React.forwardRef<HTMLDivElement, ProjectCardProps>(
                       📄
                     </span>
                   )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 hover:bg-secondary"
+                    title="Add tag"
+                    aria-label="Add tag"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }}
+                  >
+                    <TagIcon className="h-4 w-4" />
+                  </Button>
                 </div>
               </CardFooter>
             </>
@@ -255,6 +269,19 @@ const ProjectCard = React.forwardRef<HTMLDivElement, ProjectCardProps>(
                       📄
                     </span>
                   )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 hover:bg-secondary"
+                    title="Add tag"
+                    aria-label="Add tag"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }}
+                  >
+                    <TagIcon className="h-4 w-4" />
+                  </Button>
                 </div>
                 <span
                   className="ml-auto"
@@ -287,6 +314,27 @@ function BranchIcon({ className }: { className?: string }) {
       <path
         fillRule="evenodd"
         d="M11.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm-2.25.75a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.493 2.493 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25ZM4.25 12a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5ZM3.5 3.25a.75.75 0 1 1 1.5 0 .75.75 0 0 1-1.5 0Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+/**
+ * Simple tag icon component.
+ */
+function TagIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        d="M2.5 2A1.5 1.5 0 0 0 1 3.5v4.879a1.5 1.5 0 0 0 .44 1.06l6.5 6.5a1.5 1.5 0 0 0 2.12 0l4.879-4.879a1.5 1.5 0 0 0 0-2.12l-6.5-6.5a1.5 1.5 0 0 0-1.06-.44H2.5ZM5 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
         clipRule="evenodd"
       />
     </svg>

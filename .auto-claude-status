@@ -3,7 +3,7 @@
   "spec": "005-project-tags-categories",
   "state": "building",
   "subtasks": {
-    "completed": 7,
+    "completed": 8,
     "total": 13,
     "in_progress": 1,
     "failed": 0
@@ -18,8 +18,8 @@
     "max": 1
   },
   "session": {
-    "number": 9,
+    "number": 10,
     "started_at": "2026-02-21T17:04:45.933442"
   },
-  "last_update": "2026-02-21T17:23:32.835895"
+  "last_update": "2026-02-21T17:27:20.582829"
 }
