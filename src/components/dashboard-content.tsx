@@ -280,6 +280,7 @@ export function DashboardContent({
                         viewMode="grid"
                         showDescription
                         showGitInfo
+                        isFavorite={true}
                       />
                     ))}
                   </div>
@@ -312,6 +313,7 @@ export function DashboardContent({
                         viewMode="grid"
                         showDescription
                         showGitInfo
+                        isFavorite={false}
                       />
                     ))}
                   </div>

@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from "react"
 import Link from "next/link"
 
@@ -13,6 +15,7 @@ import {
 } from "@/components/ui/table"
 import { StatusBadge } from "@/components/status-badge"
 import { FavoriteButton } from "@/components/favorite-button"
+import { useFavorites } from "@/hooks/use-favorites"
 
 /**
  * Column definitions for the project table.
@@ -141,6 +144,8 @@ const ProjectTable = React.forwardRef<HTMLDivElement, ProjectTableProps>(
     },
     ref
   ) => {
+    const { isFavorite } = useFavorites()
+
     if (projects.length === 0 && showEmptyState) {
       return (
         <div
@@ -169,22 +174,28 @@ const ProjectTable = React.forwardRef<HTMLDivElement, ProjectTableProps>(
             </TableRow>
           </TableHeader>
           <TableBody>
-            {projects.map((project) => (
-              <TableRow
-                key={project.id}
-                className="cursor-pointer hover:bg-muted/70"
-                onClick={() => onProjectClick?.(project)}
-              >
-                {/* Favorite Column */}
-                <TableCell className="py-3">
-                  <FavoriteButton
-                    isFavorite={false}
-                    onToggle={() => {
-                      // Placeholder - will be wired up in later subtask
-                    }}
-                    size="sm"
-                  />
-                </TableCell>
+            {projects.map((project) => {
+              const isProjectFavorite = isFavorite(project.id)
+              return (
+                <TableRow
+                  key={project.id}
+                  className={cn(
+                    "cursor-pointer hover:bg-muted/70",
+                    isProjectFavorite && "bg-primary/5 dark:bg-primary/10"
+                  )}
+                  onClick={() => onProjectClick?.(project)}
+                >
+
+                  {/* Favorite Column */}
+                  <TableCell className="py-3">
+                    <FavoriteButton
+                      isFavorite={isProjectFavorite}
+                      onToggle={() => {
+                        // Placeholder - will be wired up in later subtask
+                      }}
+                      size="sm"
+                    />
+                  </TableCell>
 
                 {/* Status Column */}
                 <TableCell className="py-3">
@@ -280,7 +291,8 @@ const ProjectTable = React.forwardRef<HTMLDivElement, ProjectTableProps>(
                   </div>
                 </TableCell>
               </TableRow>
-            ))}
+              )
+            })}
           </TableBody>
         </Table>
       </div>
