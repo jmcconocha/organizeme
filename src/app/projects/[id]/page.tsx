@@ -19,6 +19,8 @@ import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProjectDetailActions } from "./project-detail-actions"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
+import { ProjectTagsSection } from "@/components/project-tags-section"
+import { getAllTags } from "@/lib/tag-storage"
 
 interface ProjectDetailPageProps {
   params: Promise<{ id: string }>
@@ -178,6 +180,9 @@ async function ProjectDetailContent({ id }: { id: string }) {
     notFound()
   }
 
+  // Get all available tags for autocomplete
+  const allTags = await getAllTags()
+
   return (
     <div className="space-y-6">
       {/* Project Header */}
@@ -193,6 +198,13 @@ async function ProjectDetailContent({ id }: { id: string }) {
         </div>
         <ProjectDetailActions projectPath={project.path} projectId={project.id} gitRemoteUrl={project.gitRemoteUrl} />
       </div>
+
+      {/* Tags Section */}
+      <ProjectTagsSection
+        projectId={project.id}
+        currentTags={project.tags || []}
+        availableTags={allTags}
+      />
 
       <Separator />
 

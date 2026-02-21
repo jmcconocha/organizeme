@@ -8,6 +8,7 @@
 import { readdir, stat, access } from 'fs/promises'
 import { join } from 'path'
 import type { Project, ProjectStatus } from '@/types/project'
+import { getProjectTags } from '@/lib/tag-storage'
 
 /**
  * Directories to ignore when scanning for projects.
@@ -178,6 +179,7 @@ async function getProjectDescription(dirPath: string): Promise<string | undefine
  */
 async function scanProject(dirPath: string, name: string): Promise<Project> {
   const stats = await stat(dirPath)
+  const projectId = createProjectId(name)
 
   // Check for README files (any variant)
   const readmeChecks = await Promise.all([
@@ -187,13 +189,14 @@ async function scanProject(dirPath: string, name: string): Promise<Project> {
   ])
   const hasReadmeFile = readmeChecks.some(exists => exists)
 
-  const [hasPackageJson, description] = await Promise.all([
+  const [hasPackageJson, description, tags] = await Promise.all([
     fileExists(join(dirPath, 'package.json')),
     getProjectDescription(dirPath),
+    getProjectTags(projectId),
   ])
 
   return {
-    id: createProjectId(name),
+    id: projectId,
     name,
     path: dirPath,
     description,
@@ -203,6 +206,7 @@ async function scanProject(dirPath: string, name: string): Promise<Project> {
     hasReadme: hasReadmeFile,
     // gitInfo will be populated by git-utils.ts
     gitInfo: undefined,
+    tags,
   }
 }
 

@@ -16,6 +16,7 @@ import { ProjectTable } from "@/components/project-table"
 import { RefreshButton } from "@/components/refresh-button"
 import { SortDropdown } from "@/components/sort-dropdown"
 import { StatusBadge } from "@/components/status-badge"
+import { TagFilter } from "@/components/tag-filter"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -120,6 +121,7 @@ export function DashboardContent({
 }: DashboardContentProps) {
   const router = useRouter()
   const [currentSort, setCurrentSort] = React.useState<SortOption>("modified-newest")
+  const [selectedTags, setSelectedTags] = React.useState<string[]>([])
   const { favorites, toggleFavorite } = useFavorites()
 
   const handleRefreshComplete = React.useCallback(() => {
@@ -135,10 +137,39 @@ export function DashboardContent({
     [router]
   )
 
+  // Collect all unique tags from all projects and count their usage
+  const { availableTags, tagCounts } = React.useMemo(() => {
+    const tagsSet = new Set<string>()
+    const counts = new Map<string, number>()
+
+    projects.forEach((project) => {
+      project.tags?.forEach((tag) => {
+        tagsSet.add(tag)
+        counts.set(tag, (counts.get(tag) || 0) + 1)
+      })
+    })
+
+    return {
+      availableTags: Array.from(tagsSet).sort(),
+      tagCounts: counts,
+    }
+  }, [projects])
+
+  // Filter projects by selected tags
+  const filteredProjects = React.useMemo(() => {
+    if (selectedTags.length === 0) {
+      return projects
+    }
+    return projects.filter((project) => {
+      // Project must have at least one of the selected tags
+      return project.tags?.some((tag) => selectedTags.includes(tag))
+    })
+  }, [projects, selectedTags])
+
   // Sort projects based on current sort option with favorites appearing first
   const sortedProjects = React.useMemo(
-    () => sortProjectsWithFavorites(projects, favorites, currentSort),
-    [projects, favorites, currentSort]
+    () => sortProjectsWithFavorites(filteredProjects, favorites, currentSort),
+    [filteredProjects, favorites, currentSort]
   )
 
   // Split projects into favorites and non-favorites for grid view
@@ -245,6 +276,13 @@ export function DashboardContent({
                   <span className="hidden sm:inline">Table</span>
                 </TabsTrigger>
               </TabsList>
+
+              <TagFilter
+                availableTags={availableTags}
+                selectedTags={selectedTags}
+                onTagsChange={setSelectedTags}
+                tagCounts={tagCounts}
+              />
 
               <SortDropdown
                 currentSort={currentSort}
