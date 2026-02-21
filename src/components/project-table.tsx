@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { StatusBadge } from "@/components/status-badge"
+import { FavoriteButton } from "@/components/favorite-button"
 
 /**
  * Column definitions for the project table.
@@ -24,6 +25,7 @@ interface TableColumn {
 }
 
 const columns: TableColumn[] = [
+  { key: "favorite", label: "", className: "w-[50px]" },
   { key: "status", label: "Status", className: "w-[100px]" },
   { key: "name", label: "Name", className: "min-w-[150px]" },
   { key: "branch", label: "Branch", className: "w-[140px]" },
@@ -173,6 +175,17 @@ const ProjectTable = React.forwardRef<HTMLDivElement, ProjectTableProps>(
                 className="cursor-pointer hover:bg-muted/70"
                 onClick={() => onProjectClick?.(project)}
               >
+                {/* Favorite Column */}
+                <TableCell className="py-3">
+                  <FavoriteButton
+                    isFavorite={false}
+                    onToggle={() => {
+                      // Placeholder - will be wired up in later subtask
+                    }}
+                    size="sm"
+                  />
+                </TableCell>
+
                 {/* Status Column */}
                 <TableCell className="py-3">
                   <StatusBadge
