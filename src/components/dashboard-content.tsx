@@ -14,6 +14,7 @@ import type { Project, ProjectStatus } from "@/types/project"
 import { ProjectCard } from "@/components/project-card"
 import { ProjectTable } from "@/components/project-table"
 import { RefreshButton } from "@/components/refresh-button"
+import { SearchBar } from "@/components/search-bar"
 import { SortDropdown } from "@/components/sort-dropdown"
 import { StatusBadge } from "@/components/status-badge"
 import { TagFilter } from "@/components/tag-filter"
@@ -282,7 +283,13 @@ export function DashboardContent({
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-1 sm:flex-initial justify-end">
+              <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="Search projects..."
+              />
+
               <TabsList>
                 <TabsTrigger value="grid" className="gap-1.5">
                   <GridIcon className="h-4 w-4" />
