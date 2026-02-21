@@ -17,9 +17,10 @@ interface TagFilterProps {
   availableTags: string[]
   selectedTags: string[]
   onTagsChange: (tags: string[]) => void
+  tagCounts?: Map<string, number>
 }
 
-export function TagFilter({ availableTags, selectedTags, onTagsChange }: TagFilterProps) {
+export function TagFilter({ availableTags, selectedTags, onTagsChange, tagCounts }: TagFilterProps) {
   const [mounted, setMounted] = React.useState(false)
 
   // Avoid hydration mismatch by only rendering after mount
@@ -69,15 +70,27 @@ export function TagFilter({ availableTags, selectedTags, onTagsChange }: TagFilt
             No tags available
           </div>
         ) : (
-          availableTags.map((tag) => (
-            <DropdownMenuCheckboxItem
-              key={tag}
-              checked={selectedTags.includes(tag)}
-              onCheckedChange={(checked) => handleTagToggle(tag, checked)}
-            >
-              {tag}
-            </DropdownMenuCheckboxItem>
-          ))
+          availableTags.map((tag) => {
+            const count = tagCounts?.get(tag)
+            const displayText = count ? `${tag} (${count})` : tag
+
+            return (
+              <DropdownMenuCheckboxItem
+                key={tag}
+                checked={selectedTags.includes(tag)}
+                onCheckedChange={(checked) => handleTagToggle(tag, checked)}
+              >
+                <span className="flex items-center justify-between w-full">
+                  <span>{tag}</span>
+                  {count && (
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      {count}
+                    </span>
+                  )}
+                </span>
+              </DropdownMenuCheckboxItem>
+            )
+          })
         )}
       </DropdownMenuContent>
     </DropdownMenu>

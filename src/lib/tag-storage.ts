@@ -156,6 +156,36 @@ export async function getAllTags(): Promise<string[]> {
 }
 
 /**
+ * Gets the usage count for each tag across all projects.
+ *
+ * This function counts how many projects use each tag, which is useful
+ * for displaying tag popularity and cleaning up unused tags.
+ *
+ * @returns Promise resolving to a Map of tag names to their usage counts
+ *
+ * @example
+ * ```ts
+ * const tagCounts = await getTagUsageCounts()
+ * console.log(tagCounts.get('work')) // 5 (used in 5 projects)
+ * console.log(tagCounts.get('frontend')) // 3 (used in 3 projects)
+ * ```
+ */
+export async function getTagUsageCounts(): Promise<Map<string, number>> {
+  const allTags = await loadProjectTags()
+  const tagCounts = new Map<string, number>()
+
+  // Count occurrences of each tag across all projects
+  for (const tags of Object.values(allTags)) {
+    for (const tag of tags) {
+      const currentCount = tagCounts.get(tag) || 0
+      tagCounts.set(tag, currentCount + 1)
+    }
+  }
+
+  return tagCounts
+}
+
+/**
  * Adds a single tag to a project.
  * If the tag already exists for the project, it won't be duplicated.
  *

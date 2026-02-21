@@ -135,13 +135,22 @@ export function DashboardContent({
     [router]
   )
 
-  // Collect all unique tags from all projects
-  const availableTags = React.useMemo(() => {
+  // Collect all unique tags from all projects and count their usage
+  const { availableTags, tagCounts } = React.useMemo(() => {
     const tagsSet = new Set<string>()
+    const counts = new Map<string, number>()
+
     projects.forEach((project) => {
-      project.tags?.forEach((tag) => tagsSet.add(tag))
+      project.tags?.forEach((tag) => {
+        tagsSet.add(tag)
+        counts.set(tag, (counts.get(tag) || 0) + 1)
+      })
     })
-    return Array.from(tagsSet).sort()
+
+    return {
+      availableTags: Array.from(tagsSet).sort(),
+      tagCounts: counts,
+    }
   }, [projects])
 
   // Filter projects by selected tags
@@ -261,6 +270,7 @@ export function DashboardContent({
                 availableTags={availableTags}
                 selectedTags={selectedTags}
                 onTagsChange={setSelectedTags}
+                tagCounts={tagCounts}
               />
 
               <SortDropdown
