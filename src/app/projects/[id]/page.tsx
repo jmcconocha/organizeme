@@ -19,6 +19,7 @@ import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProjectDetailActions } from "./project-detail-actions"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
+import { Badge } from "@/components/ui/badge"
 
 interface ProjectDetailPageProps {
   params: Promise<{ id: string }>
@@ -193,6 +194,20 @@ async function ProjectDetailContent({ id }: { id: string }) {
         </div>
         <ProjectDetailActions projectPath={project.path} projectId={project.id} gitRemoteUrl={project.gitRemoteUrl} />
       </div>
+
+      {/* Tags Section */}
+      {project.tags && project.tags.length > 0 && (
+        <div className="space-y-2">
+          <h2 className="text-sm font-medium text-muted-foreground">Tags</h2>
+          <div className="flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <Badge key={tag} variant="secondary">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      )}
 
       <Separator />
 
