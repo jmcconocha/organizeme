@@ -45,6 +45,8 @@ export interface ProjectCardProps
   showGitInfo?: boolean
   /** Whether this project is marked as a favorite */
   isFavorite?: boolean
+  /** Callback when favorite status is toggled */
+  onToggle?: () => void
 }
 
 /**
@@ -111,6 +113,7 @@ const ProjectCard = React.forwardRef<HTMLDivElement, ProjectCardProps>(
       showDescription = true,
       showGitInfo = true,
       isFavorite = false,
+      onToggle,
       ...props
     },
     ref
@@ -143,9 +146,7 @@ const ProjectCard = React.forwardRef<HTMLDivElement, ProjectCardProps>(
                   <div className="flex items-center gap-1">
                     <FavoriteButton
                       isFavorite={isFavorite}
-                      onToggle={() => {
-                        // Placeholder - will be wired up in later subtask
-                      }}
+                      onToggle={onToggle}
                       size="sm"
                     />
                     <StatusBadge status={project.status} showLabel={false} />
@@ -209,9 +210,7 @@ const ProjectCard = React.forwardRef<HTMLDivElement, ProjectCardProps>(
               <div className="flex-shrink-0 p-4 flex items-center gap-2">
                 <FavoriteButton
                   isFavorite={isFavorite}
-                  onToggle={() => {
-                    // Placeholder - will be wired up in later subtask
-                  }}
+                  onToggle={onToggle}
                   size="sm"
                 />
                 <StatusBadge status={project.status} showLabel={false} />

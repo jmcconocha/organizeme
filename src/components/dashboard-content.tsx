@@ -120,7 +120,7 @@ export function DashboardContent({
 }: DashboardContentProps) {
   const router = useRouter()
   const [currentSort, setCurrentSort] = React.useState<SortOption>("modified-newest")
-  const { favorites } = useFavorites()
+  const { favorites, toggleFavorite } = useFavorites()
 
   const handleRefreshComplete = React.useCallback(() => {
     // Refresh the page to get updated data
@@ -281,6 +281,7 @@ export function DashboardContent({
                         showDescription
                         showGitInfo
                         isFavorite={true}
+                        onToggle={() => toggleFavorite(project.id)}
                       />
                     ))}
                   </div>
@@ -314,6 +315,7 @@ export function DashboardContent({
                         showDescription
                         showGitInfo
                         isFavorite={false}
+                        onToggle={() => toggleFavorite(project.id)}
                       />
                     ))}
                   </div>

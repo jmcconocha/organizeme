@@ -144,7 +144,7 @@ const ProjectTable = React.forwardRef<HTMLDivElement, ProjectTableProps>(
     },
     ref
   ) => {
-    const { isFavorite } = useFavorites()
+    const { isFavorite, toggleFavorite } = useFavorites()
 
     if (projects.length === 0 && showEmptyState) {
       return (
@@ -190,9 +190,7 @@ const ProjectTable = React.forwardRef<HTMLDivElement, ProjectTableProps>(
                   <TableCell className="py-3">
                     <FavoriteButton
                       isFavorite={isProjectFavorite}
-                      onToggle={() => {
-                        // Placeholder - will be wired up in later subtask
-                      }}
+                      onToggle={() => toggleFavorite(project.id)}
                       size="sm"
                     />
                   </TableCell>
