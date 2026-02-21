@@ -118,7 +118,7 @@ export function DashboardContent({
   statusSummary,
 }: DashboardContentProps) {
   const router = useRouter()
-  const [currentSort, setCurrentSort] = React.useState<SortOption>("name-asc")
+  const [currentSort, setCurrentSort] = React.useState<SortOption>("modified-newest")
 
   const handleRefreshComplete = React.useCallback(() => {
     // Refresh the page to get updated data
