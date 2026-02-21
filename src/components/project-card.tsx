@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from "react"
 import Link from "next/link"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -13,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { StatusBadge } from "@/components/status-badge"
+import { FavoriteButton } from "@/components/favorite-button"
 
 /**
  * View mode variants for the project card.
@@ -133,7 +136,16 @@ const ProjectCard = React.forwardRef<HTMLDivElement, ProjectCardProps>(
                   >
                     {project.name}
                   </CardTitle>
-                  <StatusBadge status={project.status} showLabel={false} />
+                  <div className="flex items-center gap-1">
+                    <FavoriteButton
+                      isFavorite={false}
+                      onToggle={() => {
+                        // Placeholder - will be wired up in later subtask
+                      }}
+                      size="sm"
+                    />
+                    <StatusBadge status={project.status} showLabel={false} />
+                  </div>
                 </div>
                 {showDescription && project.description && (
                   <CardDescription className="line-clamp-2">
@@ -190,7 +202,14 @@ const ProjectCard = React.forwardRef<HTMLDivElement, ProjectCardProps>(
           ) : (
             // List View Layout
             <>
-              <div className="flex-shrink-0 p-4">
+              <div className="flex-shrink-0 p-4 flex items-center gap-2">
+                <FavoriteButton
+                  isFavorite={false}
+                  onToggle={() => {
+                    // Placeholder - will be wired up in later subtask
+                  }}
+                  size="sm"
+                />
                 <StatusBadge status={project.status} showLabel={false} />
               </div>
               <CardHeader className="flex-1 py-4 pl-0">
