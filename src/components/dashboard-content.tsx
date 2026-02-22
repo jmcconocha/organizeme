@@ -14,6 +14,7 @@ import type { Project, ProjectStatus } from "@/types/project"
 import { ProjectCard } from "@/components/project-card"
 import { ProjectTable } from "@/components/project-table"
 import { RefreshButton } from "@/components/refresh-button"
+import { SearchBar } from "@/components/search-bar"
 import { SortDropdown } from "@/components/sort-dropdown"
 import { StatusBadge } from "@/components/status-badge"
 import { TagFilter } from "@/components/tag-filter"
@@ -122,6 +123,7 @@ export function DashboardContent({
   const router = useRouter()
   const [currentSort, setCurrentSort] = React.useState<SortOption>("modified-newest")
   const [selectedTags, setSelectedTags] = React.useState<string[]>([])
+  const [searchQuery, setSearchQuery] = React.useState<string>("")
   const { favorites, toggleFavorite } = useFavorites()
 
   const handleRefreshComplete = React.useCallback(() => {
@@ -155,16 +157,32 @@ export function DashboardContent({
     }
   }, [projects])
 
+  // Filter projects by search query
+  const searchFilteredProjects = React.useMemo(() => {
+    if (!searchQuery || searchQuery.trim() === "") {
+      return projects
+    }
+    const lowerQuery = searchQuery.toLowerCase()
+    return projects.filter((project) => {
+      // Search in name, path, and description (case-insensitive)
+      return (
+        project.name.toLowerCase().includes(lowerQuery) ||
+        project.path.toLowerCase().includes(lowerQuery) ||
+        (project.description?.toLowerCase().includes(lowerQuery) ?? false)
+      )
+    })
+  }, [projects, searchQuery])
+
   // Filter projects by selected tags
   const filteredProjects = React.useMemo(() => {
     if (selectedTags.length === 0) {
-      return projects
+      return searchFilteredProjects
     }
-    return projects.filter((project) => {
+    return searchFilteredProjects.filter((project) => {
       // Project must have at least one of the selected tags
       return project.tags?.some((tag) => selectedTags.includes(tag))
     })
-  }, [projects, selectedTags])
+  }, [searchFilteredProjects, selectedTags])
 
   // Sort projects based on current sort option with favorites appearing first
   const sortedProjects = React.useMemo(
@@ -180,6 +198,15 @@ export function DashboardContent({
       nonFavoriteProjects: sortedProjects.filter((p) => !favSet.has(p.id)),
     }
   }, [sortedProjects, favorites])
+
+  // Check if any filters are active
+  const hasActiveFilters = searchQuery.trim() !== "" || selectedTags.length > 0
+
+  // Handler to clear all filters
+  const handleClearFilters = React.useCallback(() => {
+    setSearchQuery("")
+    setSelectedTags([])
+  }, [])
 
   if (projects.length === 0) {
     return (
@@ -261,11 +288,19 @@ export function DashboardContent({
                 Projects
               </h2>
               <span className="text-sm text-muted-foreground">
-                ({sortedProjects.length})
+                {hasActiveFilters
+                  ? `(${sortedProjects.length} of ${projects.length})`
+                  : `(${sortedProjects.length})`}
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-1 sm:flex-initial justify-end">
+              <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                placeholder="Search projects..."
+              />
+
               <TabsList>
                 <TabsTrigger value="grid" className="gap-1.5">
                   <GridIcon className="h-4 w-4" />
@@ -298,9 +333,26 @@ export function DashboardContent({
 
           {/* Grid View */}
           <TabsContent value="grid" className="mt-0">
-            <div className="space-y-6">
-              {/* Favorites Section */}
-              {favoriteProjects.length > 0 && (
+            {sortedProjects.length === 0 && hasActiveFilters ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="rounded-full bg-muted p-4 mb-4">
+                  <FolderIcon className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h2 className="text-xl font-semibold mb-2">No Projects Found</h2>
+                <p className="text-muted-foreground max-w-md mb-6">
+                  No projects match your current search or filter criteria.
+                </p>
+                <button
+                  onClick={handleClearFilters}
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {/* Favorites Section */}
+                {favoriteProjects.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-4">
                     <h3 className="text-sm font-medium text-muted-foreground">
@@ -359,17 +411,36 @@ export function DashboardContent({
                   </div>
                 </div>
               )}
-            </div>
+              </div>
+            )}
           </TabsContent>
 
           {/* Table View */}
           <TabsContent value="table" className="mt-0">
-            <div className="border rounded-lg overflow-hidden">
-              <ProjectTable
-                projects={sortedProjects}
-                onProjectClick={handleProjectClick}
-              />
-            </div>
+            {sortedProjects.length === 0 && hasActiveFilters ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="rounded-full bg-muted p-4 mb-4">
+                  <FolderIcon className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h2 className="text-xl font-semibold mb-2">No Projects Found</h2>
+                <p className="text-muted-foreground max-w-md mb-6">
+                  No projects match your current search or filter criteria.
+                </p>
+                <button
+                  onClick={handleClearFilters}
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            ) : (
+              <div className="border rounded-lg overflow-hidden">
+                <ProjectTable
+                  projects={sortedProjects}
+                  onProjectClick={handleProjectClick}
+                />
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </section>
