@@ -199,6 +199,7 @@ export function DashboardContent({
     totalPages,
     hasPreviousPage,
     hasNextPage,
+    goToPage,
     nextPage,
     previousPage,
     setPageSize,
@@ -209,6 +210,11 @@ export function DashboardContent({
     initialPageSize: 20,
     syncWithUrl: true,
   })
+
+  // Reset to page 1 when search query or tag filters change
+  React.useEffect(() => {
+    goToPage(1)
+  }, [searchQuery, selectedTags, goToPage])
 
   // Get the current page of projects
   const paginatedProjects = React.useMemo(
