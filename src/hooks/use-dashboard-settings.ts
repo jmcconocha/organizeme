@@ -22,6 +22,8 @@ import {
 export interface UseDashboardSettingsReturn {
   /** Current dashboard settings object */
   settings: DashboardSettings
+  /** Whether settings have been loaded from localStorage */
+  isLoaded: boolean
   /** Updates one or more dashboard settings */
   updateSettings: (updates: Partial<DashboardSettings>) => void
   /** Resets all settings to their default values */
@@ -61,10 +63,12 @@ export interface UseDashboardSettingsReturn {
 export function useDashboardSettings(): UseDashboardSettingsReturn {
   // Initialize state with default settings
   const [settings, setSettings] = React.useState<DashboardSettings>(() => DEFAULT_DASHBOARD_SETTINGS)
+  const [isLoaded, setIsLoaded] = React.useState(false)
 
   // Load settings from localStorage on mount
   React.useEffect(() => {
     setSettings(getDashboardSettings())
+    setIsLoaded(true)
   }, [])
 
   /**
@@ -87,6 +91,7 @@ export function useDashboardSettings(): UseDashboardSettingsReturn {
 
   return {
     settings,
+    isLoaded,
     updateSettings,
     resetToDefaults,
   }

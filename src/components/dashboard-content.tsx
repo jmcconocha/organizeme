@@ -159,7 +159,7 @@ export function DashboardContent({
   const [showArchived, setShowArchived] = React.useState<boolean>(false)
   const { favorites, toggleFavorite } = useFavorites()
   const { archivedProjects, toggleArchive } = useArchive()
-  const { settings } = useDashboardSettings()
+  const { settings, isLoaded, updateSettings } = useDashboardSettings()
 
   // Use the status filters hook for localStorage persistence
   const {
@@ -446,7 +446,7 @@ export function DashboardContent({
 
       {/* Projects View */}
       <section aria-labelledby="projects-heading">
-        <Tabs defaultValue={settings.defaultView} className="w-full">
+        <Tabs value={settings.defaultView} onValueChange={(v) => updateSettings({ defaultView: v as "grid" | "table" })} className={`w-full ${!isLoaded ? 'invisible' : ''}`}>
           {/* Toolbar */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div className="flex items-center gap-2">
