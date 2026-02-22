@@ -156,7 +156,7 @@ export function DashboardContent({
   const [searchQuery, setSearchQuery] = React.useState<string>("")
   const [showArchived, setShowArchived] = React.useState<boolean>(false)
   const { favorites, toggleFavorite } = useFavorites()
-  const { archivedProjects } = useArchive()
+  const { archivedProjects, toggleArchive } = useArchive()
 
   // Use the status filters hook for localStorage persistence
   const {
@@ -564,6 +564,8 @@ export function DashboardContent({
                           showGitInfo
                           isFavorite={true}
                           onToggle={() => toggleFavorite(project.id)}
+                          isArchived={archivedProjects.has(project.id)}
+                          onArchiveToggle={() => toggleArchive(project.id)}
                         />
                       ))}
                     </div>
@@ -598,6 +600,8 @@ export function DashboardContent({
                           showGitInfo
                           isFavorite={false}
                           onToggle={() => toggleFavorite(project.id)}
+                          isArchived={archivedProjects.has(project.id)}
+                          onArchiveToggle={() => toggleArchive(project.id)}
                         />
                       ))}
                     </div>
@@ -630,6 +634,8 @@ export function DashboardContent({
                           showGitInfo
                           isFavorite={favorites.has(project.id)}
                           onToggle={() => toggleFavorite(project.id)}
+                          isArchived={archivedProjects.has(project.id)}
+                          onArchiveToggle={() => toggleArchive(project.id)}
                         />
                       ))}
                     </div>
