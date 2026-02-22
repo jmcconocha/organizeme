@@ -565,6 +565,7 @@ export function DashboardContent({
                           key={project.id}
                           project={project}
                           viewMode="grid"
+                          density={settings.cardDensity}
                           showDescription
                           showGitInfo
                           isFavorite={true}
@@ -601,6 +602,7 @@ export function DashboardContent({
                           key={project.id}
                           project={project}
                           viewMode="grid"
+                          density={settings.cardDensity}
                           showDescription
                           showGitInfo
                           isFavorite={false}
@@ -635,6 +637,7 @@ export function DashboardContent({
                           key={project.id}
                           project={project}
                           viewMode="grid"
+                          density={settings.cardDensity}
                           showDescription
                           showGitInfo
                           isFavorite={favorites.has(project.id)}
