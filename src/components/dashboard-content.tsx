@@ -279,6 +279,22 @@ export function DashboardContent({
     setSelectedStatuses([])
   }, [])
 
+  // Handler to toggle a status filter when clicking a status card
+  const handleStatusCardClick = React.useCallback(
+    (status: ProjectStatus) => {
+      setSelectedStatuses((prev) => {
+        if (prev.includes(status)) {
+          // Remove status if already selected
+          return prev.filter((s) => s !== status)
+        } else {
+          // Add status if not selected
+          return [...prev, status]
+        }
+      })
+    },
+    []
+  )
+
   if (projects.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -325,8 +341,26 @@ export function DashboardContent({
             const count = statusSummary[status]
             if (count === 0) return null
 
+            const isActive = selectedStatuses.includes(status)
+
             return (
-              <Card key={status}>
+              <Card
+                key={status}
+                className={`cursor-pointer transition-all hover:shadow-md ${
+                  isActive
+                    ? "ring-2 ring-primary shadow-md"
+                    : "hover:border-muted-foreground/50"
+                }`}
+                onClick={() => handleStatusCardClick(status)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    handleStatusCardClick(status)
+                  }
+                }}
+              >
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                     <StatusBadge
