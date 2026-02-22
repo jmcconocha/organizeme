@@ -112,6 +112,12 @@ export function usePagination({
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  // Use a ref for searchParams to prevent updateUrl from being recreated on every URL change
+  const searchParamsRef = React.useRef(searchParams)
+  React.useEffect(() => {
+    searchParamsRef.current = searchParams
+  })
+
   // Initialize state from URL params if syncing is enabled, otherwise use defaults
   const [currentPage, setCurrentPage] = React.useState<number>(() => {
     if (!syncWithUrl) return initialPage
@@ -147,12 +153,12 @@ export function usePagination({
     (page: number, size: number) => {
       if (!syncWithUrl) return
 
-      const params = new URLSearchParams(searchParams.toString())
+      const params = new URLSearchParams(searchParamsRef.current.toString())
       params.set("page", page.toString())
       params.set("pageSize", size.toString())
       router.push(`?${params.toString()}`, { scroll: false })
     },
-    [router, searchParams, syncWithUrl]
+    [router, syncWithUrl]
   )
 
   /**

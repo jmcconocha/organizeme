@@ -1,0 +1,93 @@
+{
+  "project_root": "/Users/jmcconocha/Documents/Projects/organizeMe",
+  "project_type": "single",
+  "services": {
+    "main": {
+      "name": "main",
+      "path": "/Users/jmcconocha/Documents/Projects/organizeMe",
+      "language": "TypeScript",
+      "framework": "Next.js",
+      "type": "frontend",
+      "package_manager": "npm",
+      "default_port": 3000,
+      "styling": "Tailwind CSS",
+      "dev_command": "npm run dev",
+      "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+      },
+      "key_directories": {
+        "src": {
+          "path": "src",
+          "purpose": "Source code"
+        }
+      },
+      "dependencies": [
+        "@radix-ui/react-dropdown-menu",
+        "@radix-ui/react-separator",
+        "@radix-ui/react-slot",
+        "@radix-ui/react-tabs",
+        "@tailwindcss/typography",
+        "class-variance-authority",
+        "clsx",
+        "lucide-react",
+        "next",
+        "next-themes",
+        "react",
+        "react-dom",
+        "react-markdown",
+        "rehype-highlight",
+        "remark-gfm",
+        "simple-git",
+        "tailwind-merge",
+        "tailwindcss-animate"
+      ],
+      "dev_dependencies": [
+        "@types/node",
+        "@types/react",
+        "@types/react-dom",
+        "eslint",
+        "eslint-config-next",
+        "postcss",
+        "tailwindcss",
+        "typescript"
+      ],
+      "dependency_locations": [
+        {
+          "type": "node_modules",
+          "path": "node_modules",
+          "exists": true
+        }
+      ],
+      "environment": {
+        "variables": {
+          "PROJECTS_PATH": {
+            "value": null,
+            "source": ".env.example",
+            "type": "string",
+            "sensitive": false,
+            "required": true
+          }
+        },
+        "required_count": 1,
+        "optional_count": 0,
+        "detected_count": 1
+      }
+    }
+  },
+  "infrastructure": {},
+  "conventions": {
+    "typescript": true
+  },
+  "dependency_locations": [
+    {
+      "type": "node_modules",
+      "path": "node_modules",
+      "exists": true,
+      "service": "main",
+      "package_manager": "npm"
+    }
+  ]
+}

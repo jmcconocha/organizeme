@@ -1,0 +1,596 @@
+{
+  "id": "roadmap-2025-02-20T17-05-00Z",
+  "project_name": "Project Management Dashboard",
+  "version": "1.0",
+  "vision": "A unified dashboard for developers to track and manage all their local coding projects at a glance",
+  "target_audience": {
+    "primary": "Solo developers or small teams who manage multiple local coding projects and want a visual dashboard to track project status, Git state, and activity",
+    "secondary": [
+      "Freelance developers with many client projects",
+      "Open source contributors managing multiple repositories",
+      "Development team leads who need project health visibility"
+    ]
+  },
+  "phases": [
+    {
+      "id": "phase-1",
+      "name": "Foundation & Core Usability",
+      "description": "Complete the MVP by adding essential search, filter, and sorting capabilities that make the dashboard usable at scale",
+      "order": 1,
+      "status": "in_progress",
+      "features": [
+        "feature-1",
+        "feature-2",
+        "feature-3",
+        "feature-4"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-1-1",
+          "title": "Search & Discovery",
+          "description": "Users can quickly find any project using search and filters",
+          "features": [
+            "feature-1",
+            "feature-2"
+          ],
+          "status": "in_progress"
+        },
+        {
+          "id": "milestone-1-2",
+          "title": "Content Enhancement",
+          "description": "Project details are presented beautifully with proper formatting",
+          "features": [
+            "feature-3",
+            "feature-4"
+          ],
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "phase-2",
+      "name": "Organization & Workflow",
+      "description": "Add features that help users organize projects and streamline their daily workflow",
+      "order": 2,
+      "status": "in_progress",
+      "features": [
+        "feature-5",
+        "feature-6",
+        "feature-7",
+        "feature-8"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-2-1",
+          "title": "Project Organization",
+          "description": "Users can categorize, tag, and prioritize their projects",
+          "features": [
+            "feature-5",
+            "feature-6"
+          ],
+          "status": "completed"
+        },
+        {
+          "id": "milestone-2-2",
+          "title": "Power User Features",
+          "description": "Keyboard shortcuts and batch operations for efficient navigation",
+          "features": [
+            "feature-7",
+            "feature-8"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "phase-3",
+      "name": "Performance & Scale",
+      "description": "Optimize performance for users with large numbers of projects and improve reliability",
+      "order": 3,
+      "status": "in_progress",
+      "features": [
+        "feature-9",
+        "feature-10",
+        "feature-11",
+        "feature-12"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-3-1",
+          "title": "Performance Optimization",
+          "description": "Dashboard loads instantly with caching and pagination",
+          "features": [
+            "feature-9",
+            "feature-10"
+          ],
+          "status": "in_progress"
+        },
+        {
+          "id": "milestone-3-2",
+          "title": "Reliability & Quality",
+          "description": "Comprehensive test coverage ensures stability",
+          "features": [
+            "feature-11",
+            "feature-12"
+          ],
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "phase-4",
+      "name": "Advanced Features & Polish",
+      "description": "Add advanced customization, notifications, and personalization features",
+      "order": 4,
+      "status": "planned",
+      "features": [
+        "feature-13",
+        "feature-14",
+        "feature-15",
+        "feature-16"
+      ],
+      "milestones": [
+        {
+          "id": "milestone-4-1",
+          "title": "Personalization",
+          "description": "Users can customize their dashboard experience",
+          "features": [
+            "feature-13",
+            "feature-14"
+          ],
+          "status": "planned"
+        },
+        {
+          "id": "milestone-4-2",
+          "title": "Proactive Insights",
+          "description": "Dashboard proactively alerts users to projects needing attention",
+          "features": [
+            "feature-15",
+            "feature-16"
+          ],
+          "status": "planned"
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": "feature-1",
+      "title": "Project Search",
+      "description": "Add a global search bar that allows users to quickly find projects by name, description, or path. Search should be instant with real-time filtering as the user types.",
+      "rationale": "Users with many projects struggle to locate specific ones. Search addresses the pain point of 'no easy way to see at-a-glance status of all local projects' and reduces time spent scrolling through project lists.",
+      "priority": "must",
+      "complexity": "low",
+      "impact": "high",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "done",
+      "acceptance_criteria": [
+        "Search bar is prominently displayed in the dashboard header",
+        "Search filters projects in real-time as user types",
+        "Search matches against project name, path, and description",
+        "Empty search shows all projects",
+        "Search results highlight matched text",
+        "Search works in both grid and table view modes"
+      ],
+      "user_stories": [
+        "As a developer with 50+ projects, I want to search by name so that I can find a specific project in seconds",
+        "As a freelancer, I want to search by client name in the path so that I can quickly find client projects"
+      ],
+      "linked_spec_id": "008-project-search",
+      "task_outcome": "completed",
+      "previous_status": "in_progress",
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-2",
+      "title": "Status Filters",
+      "description": "Add filter buttons or a filter panel to show only projects matching specific statuses (active, stale, clean, dirty, unknown). Allow multiple filters to be combined.",
+      "rationale": "Users need to quickly identify which projects need attention. This directly addresses 'losing track of which projects have uncommitted changes' by letting users filter to only dirty projects.",
+      "priority": "must",
+      "complexity": "low",
+      "impact": "high",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "planned",
+      "acceptance_criteria": [
+        "Filter buttons for each status type (active, stale, clean, dirty, unknown)",
+        "Clicking a filter shows only projects with that status",
+        "Multiple filters can be combined (e.g., show dirty AND stale)",
+        "Active filters are visually highlighted",
+        "Filter state persists during session",
+        "Clear all filters button is available"
+      ],
+      "user_stories": [
+        "As a developer, I want to filter by 'dirty' status so that I can see all projects with uncommitted changes at once",
+        "As a developer, I want to filter by 'stale' status so that I can identify projects I've neglected"
+      ],
+      "linked_spec_id": "006-status-filters",
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-3",
+      "title": "Sorting Options",
+      "description": "Add a sort dropdown to organize projects by different criteria: name (A-Z, Z-A), last modified date, status, and project type. Currently only sorts by last modified.",
+      "rationale": "Different tasks require different sorting. When reviewing all projects alphabetically helps; when looking for recent work, date sorting helps. This improves the user's ability to quickly scan and find relevant projects.",
+      "priority": "must",
+      "complexity": "low",
+      "impact": "medium",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "done",
+      "acceptance_criteria": [
+        "Sort dropdown with options: Name (A-Z), Name (Z-A), Last Modified (Newest), Last Modified (Oldest), Status, Type",
+        "Current sort selection is clearly indicated",
+        "Sort applies immediately when changed",
+        "Sort preference persists during session",
+        "Works in both grid and table view modes"
+      ],
+      "user_stories": [
+        "As a developer, I want to sort projects alphabetically so that I can easily scan through my project list",
+        "As a developer, I want to sort by status so that I can see all dirty projects grouped together"
+      ],
+      "linked_spec_id": "002-sorting-options",
+      "task_outcome": "completed",
+      "previous_status": "in_progress",
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-4",
+      "title": "Markdown README Rendering",
+      "description": "Render project README files with proper Markdown formatting instead of displaying as pre-formatted text. Support headings, code blocks, links, lists, and images.",
+      "rationale": "README files are written in Markdown and should be displayed properly. This helps users 'remember what each project does when returning after time away' by presenting documentation beautifully.",
+      "priority": "must",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-1",
+      "dependencies": [],
+      "status": "done",
+      "acceptance_criteria": [
+        "README content is rendered as formatted Markdown",
+        "Headings, bold, italic, and strikethrough render correctly",
+        "Code blocks have syntax highlighting",
+        "Links are clickable and open in new tab",
+        "Images render inline (if accessible)",
+        "Lists (ordered and unordered) render correctly",
+        "Tables render correctly",
+        "Markdown rendering matches GitHub styling"
+      ],
+      "user_stories": [
+        "As a developer, I want to see my README rendered properly so that I can quickly understand what a project does",
+        "As a developer, I want code examples in README to be syntax highlighted so that I can read them easily"
+      ],
+      "linked_spec_id": "003-markdown-readme-rendering",
+      "task_outcome": "completed",
+      "previous_status": "planned",
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-5",
+      "title": "Favorite/Pinned Projects",
+      "description": "Allow users to mark projects as favorites. Favorited projects appear at the top of the list or in a dedicated 'Favorites' section for quick access.",
+      "rationale": "Users have a small set of projects they work on regularly. Pinning these reduces the 'context-switching between projects' pain point by putting frequent projects front and center.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-2",
+      "dependencies": [],
+      "status": "done",
+      "acceptance_criteria": [
+        "Star/pin icon on each project card",
+        "Clicking star toggles favorite status",
+        "Favorite projects appear at the top of the list",
+        "Favorites section is visually distinct",
+        "Favorites persist across sessions (localStorage)",
+        "Can unfavorite from any view"
+      ],
+      "user_stories": [
+        "As a developer, I want to pin my active projects so that I can access them immediately when I open the dashboard",
+        "As a freelancer, I want to favorite current client projects so that they're always visible"
+      ],
+      "linked_spec_id": "004-favorite-pinned-projects",
+      "task_outcome": "completed",
+      "previous_status": "in_progress",
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-6",
+      "title": "Project Tags & Categories",
+      "description": "Allow users to add custom tags to projects and filter by tags. Tags could include 'work', 'personal', 'client-name', 'hackathon', etc.",
+      "rationale": "Projects often belong to different contexts (work, personal, client). Tags help users 'remember what each project does' and organize projects beyond what the filesystem provides.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-2",
+      "dependencies": [],
+      "status": "done",
+      "acceptance_criteria": [
+        "Add tag button on project cards and detail pages",
+        "Tag input with autocomplete from existing tags",
+        "Tags display as colored chips on project cards",
+        "Filter dropdown/panel to filter by tags",
+        "Multiple tags can be assigned to one project",
+        "Tags persist across sessions (localStorage or config file)",
+        "Can remove tags easily"
+      ],
+      "user_stories": [
+        "As a freelancer, I want to tag projects with client names so that I can filter to see all projects for a specific client",
+        "As a developer, I want to tag projects as 'work' or 'personal' so that I can focus on the right context"
+      ],
+      "linked_spec_id": "005-project-tags-categories",
+      "task_outcome": "completed",
+      "previous_status": "in_progress",
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-7",
+      "title": "Global Keyboard Shortcuts",
+      "description": "Add keyboard shortcuts for common actions: search (Cmd+K), refresh (Cmd+R), toggle view mode (V), navigate projects (arrow keys), open selected project (Enter).",
+      "rationale": "Power users want to navigate without touching the mouse. Keyboard shortcuts significantly speed up navigation and reduce the 'context-switching is tedious' pain point.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-2",
+      "dependencies": [
+        "feature-1"
+      ],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Cmd/Ctrl + K opens search with focus",
+        "Cmd/Ctrl + R refreshes project list",
+        "V toggles between grid and table view",
+        "Arrow keys navigate between projects",
+        "Enter opens selected project detail page",
+        "Escape closes search/modals",
+        "? shows keyboard shortcuts help modal",
+        "Shortcuts work globally on dashboard"
+      ],
+      "user_stories": [
+        "As a power user, I want to press Cmd+K to quickly search so that I never need to reach for the mouse",
+        "As a developer, I want to navigate with arrow keys so that I can quickly browse through projects"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-8",
+      "title": "Project Notes & Custom Metadata",
+      "description": "Allow users to add personal notes to projects. Notes could include TODO items, current status, or context for when returning to the project later.",
+      "rationale": "README files are for documentation, but users often need personal notes like 'waiting on API access' or 'next: implement auth'. This directly addresses 'hard to remember what each project does when returning after time away'.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-2",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Notes text area on project detail page",
+        "Auto-save notes as user types",
+        "Notes preview visible on project cards (truncated)",
+        "Notes support basic formatting (or Markdown)",
+        "Notes persist across sessions",
+        "Notes are searchable via global search"
+      ],
+      "user_stories": [
+        "As a developer, I want to add notes to a project so that I remember what I was working on when I return",
+        "As a freelancer, I want to note client requirements so that I don't forget important details"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-9",
+      "title": "Project Caching",
+      "description": "Cache project scan results to avoid re-scanning on every page load. Implement smart cache invalidation based on file system changes or manual refresh.",
+      "rationale": "Currently project scanning runs on every page load, which is slow with many projects. Caching significantly improves perceived performance and reduces resource usage.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "high",
+      "phase_id": "phase-3",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Projects load instantly from cache on page load",
+        "Cache invalidates when user clicks refresh",
+        "Cache has reasonable TTL (e.g., 5 minutes)",
+        "Background refresh option to update cache silently",
+        "Cache stored in memory or filesystem",
+        "Visual indicator when showing cached vs fresh data"
+      ],
+      "user_stories": [
+        "As a developer with 100 projects, I want the dashboard to load instantly so that I don't wait for scanning",
+        "As a user, I want to know when I'm seeing cached data so that I can refresh if needed"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-10",
+      "title": "Pagination",
+      "description": "Implement pagination or virtual scrolling for users with large numbers of projects. Show a configurable number of projects per page with navigation controls.",
+      "rationale": "Users with 100+ projects will experience slow rendering and overwhelming UI. Pagination keeps the dashboard responsive and organized at scale.",
+      "priority": "should",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-3",
+      "dependencies": [],
+      "status": "done",
+      "acceptance_criteria": [
+        "Projects display in pages of configurable size (default: 20)",
+        "Pagination controls at bottom of project list",
+        "Page size selector (10, 20, 50, 100)",
+        "Current page number and total pages displayed",
+        "Navigation works with keyboard (previous/next)",
+        "URL updates to reflect current page (for bookmarking)",
+        "Search/filter results also paginate"
+      ],
+      "user_stories": [
+        "As a developer with many projects, I want pagination so that the dashboard remains fast and usable",
+        "As a user, I want to configure how many projects to show so that I can balance density and performance"
+      ],
+      "linked_spec_id": "007-pagination",
+      "task_outcome": "completed",
+      "previous_status": "planned",
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-11",
+      "title": "Unit & Integration Tests",
+      "description": "Add comprehensive test coverage using Jest and React Testing Library. Cover utility functions, components, and critical user flows.",
+      "rationale": "The project currently has no test coverage. Tests are essential for maintaining quality and enabling confident refactoring as the codebase grows.",
+      "priority": "should",
+      "complexity": "high",
+      "impact": "medium",
+      "phase_id": "phase-3",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Jest and React Testing Library configured",
+        "Unit tests for utility functions (git helpers, status logic)",
+        "Component tests for key UI components",
+        "Integration tests for project scanning flow",
+        "Test coverage reports generated",
+        "Tests run in CI pipeline",
+        "Minimum 70% code coverage"
+      ],
+      "user_stories": [
+        "As a developer, I want test coverage so that I can refactor with confidence",
+        "As a contributor, I want tests so that I know my changes don't break existing functionality"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-12",
+      "title": "Error Handling Improvements",
+      "description": "Enhance error handling with better error messages, retry capabilities, and graceful degradation when individual projects fail to scan.",
+      "rationale": "When a project fails to scan (e.g., permissions issues), the error should be clear and not affect other projects. This improves reliability and user trust.",
+      "priority": "could",
+      "complexity": "low",
+      "impact": "medium",
+      "phase_id": "phase-3",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Individual project scan failures don't affect other projects",
+        "Clear error messages explain what went wrong",
+        "Retry button for failed project scans",
+        "Error state visually distinct on project cards",
+        "Error details accessible in project detail page",
+        "Logging for debugging scan failures"
+      ],
+      "user_stories": [
+        "As a developer, I want clear error messages so that I can understand and fix issues",
+        "As a user, I want one failed project to not break my entire dashboard"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-13",
+      "title": "Dashboard Customization",
+      "description": "Allow users to customize the dashboard layout: default view mode, visible columns in table view, card density, and which status cards to show.",
+      "rationale": "Different users have different preferences. Customization lets users optimize their workflow and makes the dashboard feel personalized.",
+      "priority": "could",
+      "complexity": "medium",
+      "impact": "medium",
+      "phase_id": "phase-4",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Settings panel accessible from dashboard",
+        "Default view mode preference (grid/table)",
+        "Configurable columns in table view",
+        "Card density options (compact/comfortable/spacious)",
+        "Show/hide specific status summary cards",
+        "Settings persist across sessions",
+        "Reset to defaults option"
+      ],
+      "user_stories": [
+        "As a user, I want to customize my dashboard so that it shows exactly what I need",
+        "As a developer, I want to hide status cards I don't care about so that I can focus"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-14",
+      "title": "Project Archive/Hide",
+      "description": "Allow users to archive or hide projects they no longer want to see in the main dashboard. Archived projects remain scannable but are hidden by default.",
+      "rationale": "Users accumulate old projects over time. Archiving keeps the dashboard focused on active work without deleting projects from the filesystem.",
+      "priority": "could",
+      "complexity": "low",
+      "impact": "medium",
+      "phase_id": "phase-4",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Archive action available on project cards",
+        "Archived projects hidden from main view by default",
+        "Toggle to show/hide archived projects",
+        "Archived projects section or filter",
+        "Unarchive action to restore visibility",
+        "Archive state persists across sessions"
+      ],
+      "user_stories": [
+        "As a developer, I want to archive old projects so that my dashboard stays focused on current work",
+        "As a user, I want to unarchive a project if I return to it"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-15",
+      "title": "Status Change Notifications",
+      "description": "Detect when project status changes (e.g., becomes dirty or stale) and optionally notify the user via browser notifications or a notifications panel.",
+      "rationale": "This directly addresses 'losing track of which projects have uncommitted changes' by proactively alerting users rather than requiring them to check.",
+      "priority": "could",
+      "complexity": "high",
+      "impact": "medium",
+      "phase_id": "phase-4",
+      "dependencies": [
+        "feature-9"
+      ],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Background polling detects status changes",
+        "Browser notification permission request",
+        "Notification when project becomes dirty",
+        "Notification when project becomes stale",
+        "In-app notification panel as alternative",
+        "Notification preferences (what to notify about)",
+        "Snooze/dismiss functionality"
+      ],
+      "user_stories": [
+        "As a developer, I want to be notified when a project has uncommitted changes so that I don't forget to commit",
+        "As a user, I want to configure which notifications I receive so that I'm not overwhelmed"
+      ],
+      "competitor_insight_ids": []
+    },
+    {
+      "id": "feature-16",
+      "title": "Recent Projects Widget",
+      "description": "Add a 'Recently Opened' section showing the last 5-10 projects the user viewed or opened. Quick access to recent context.",
+      "rationale": "Users often switch between a small set of projects. A recent projects widget provides one-click access to commonly used projects without searching.",
+      "priority": "could",
+      "complexity": "low",
+      "impact": "low",
+      "phase_id": "phase-4",
+      "dependencies": [],
+      "status": "under_review",
+      "acceptance_criteria": [
+        "Recent projects section on dashboard (sidebar or top)",
+        "Shows last 5-10 projects opened/viewed",
+        "Clicking opens project detail page",
+        "Quick actions available on hover",
+        "Recency tracked in localStorage",
+        "Can clear recent history"
+      ],
+      "user_stories": [
+        "As a developer, I want quick access to recent projects so that I can resume where I left off",
+        "As a user, I want to see what projects I was working on recently"
+      ],
+      "competitor_insight_ids": []
+    }
+  ],
+  "metadata": {
+    "created_at": "2025-02-20T17:05:00Z",
+    "updated_at": "2026-02-22T03:00:00.000Z",
+    "generated_by": "roadmap_features agent",
+    "prioritization_framework": "MoSCoW",
+    "competitor_analysis_used": false
+  }
+}

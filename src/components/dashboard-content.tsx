@@ -211,10 +211,16 @@ export function DashboardContent({
     syncWithUrl: true,
   })
 
+  // Use a ref for goToPage so the reset effect only fires when filters actually change
+  const goToPageRef = React.useRef(goToPage)
+  React.useEffect(() => {
+    goToPageRef.current = goToPage
+  })
+
   // Reset to page 1 when search query or tag filters change
   React.useEffect(() => {
-    goToPage(1)
-  }, [searchQuery, selectedTags, goToPage])
+    goToPageRef.current(1)
+  }, [searchQuery, selectedTags])
 
   // Get the current page of projects
   const paginatedProjects = React.useMemo(
