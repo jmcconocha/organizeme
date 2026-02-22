@@ -74,6 +74,9 @@ export function SearchBar({
           <Search className="h-4 w-4" />
         </div>
         <Input
+          type="text"
+          value=""
+          readOnly
           className="h-9 pl-9 pr-9 border-border/50 bg-background/50 backdrop-blur-sm"
           placeholder={placeholder}
           disabled
