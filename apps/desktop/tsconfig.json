@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@organizeme/shared/*": ["../../packages/shared/src/*"],
+      "@organizeme/ui/*": ["../../packages/ui/src/*"]
+    }
+  },
+  "include": ["src"]
+}
