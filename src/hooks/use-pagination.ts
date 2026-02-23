@@ -118,6 +118,12 @@ export function usePagination({
     searchParamsRef.current = searchParams
   })
 
+  // Track whether initial mount is complete to avoid pushing URL on first render
+  const hasMountedRef = React.useRef(false)
+  React.useEffect(() => {
+    hasMountedRef.current = true
+  }, [])
+
   // Initialize state from URL params if syncing is enabled, otherwise use defaults
   const [currentPage, setCurrentPage] = React.useState<number>(() => {
     if (!syncWithUrl) return initialPage
@@ -151,12 +157,12 @@ export function usePagination({
    */
   const updateUrl = React.useCallback(
     (page: number, size: number) => {
-      if (!syncWithUrl) return
+      if (!syncWithUrl || !hasMountedRef.current) return
 
       const params = new URLSearchParams(searchParamsRef.current.toString())
       params.set("page", page.toString())
       params.set("pageSize", size.toString())
-      router.push(`?${params.toString()}`, { scroll: false })
+      router.replace(`?${params.toString()}`, { scroll: false })
     },
     [router, syncWithUrl]
   )

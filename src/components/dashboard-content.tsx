@@ -446,7 +446,7 @@ export function DashboardContent({
 
       {/* Projects View */}
       <section aria-labelledby="projects-heading">
-        <Tabs value={settings.defaultView} onValueChange={(v) => updateSettings({ defaultView: v as "grid" | "table" })} className={`w-full ${!isLoaded ? 'invisible' : ''}`}>
+        <Tabs value={settings.defaultView} onValueChange={(v) => updateSettings({ defaultView: v as "grid" | "table" })} className={`w-full transition-opacity duration-150 ${!isLoaded ? 'opacity-0' : 'opacity-100'}`}>
           {/* Toolbar */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div className="flex items-center gap-2">

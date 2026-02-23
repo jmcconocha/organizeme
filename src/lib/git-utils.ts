@@ -6,6 +6,11 @@
  */
 
 import simpleGit, { type SimpleGit, type StatusResult, type LogResult } from 'simple-git'
+
+/** Create a simple-git instance with a timeout to prevent ETIMEDOUT crashes */
+function createGit(basePath: string): SimpleGit {
+  return simpleGit(basePath, { timeout: { block: 5000 } })
+}
 import type { GitInfo, ProjectStatus } from '@/types/project'
 
 /**
@@ -37,7 +42,7 @@ export type GetGitStatusResult = GitStatusResult | GitStatusError
  */
 export async function isGitRepository(projectPath: string): Promise<boolean> {
   try {
-    const git: SimpleGit = simpleGit(projectPath)
+    const git: SimpleGit = createGit(projectPath)
     return await git.checkIsRepo()
   } catch {
     return false
@@ -68,7 +73,7 @@ export async function isGitRepository(projectPath: string): Promise<boolean> {
  */
 export async function getGitStatus(projectPath: string): Promise<GetGitStatusResult> {
   try {
-    const git: SimpleGit = simpleGit(projectPath)
+    const git: SimpleGit = createGit(projectPath)
 
     // Always check if it's a repo first
     const isRepo = await git.checkIsRepo()
@@ -253,7 +258,7 @@ export interface GitRemoteUrlResult {
  */
 export async function getGitRemoteUrl(projectPath: string): Promise<GitRemoteUrlResult> {
   try {
-    const git: SimpleGit = simpleGit(projectPath)
+    const git: SimpleGit = createGit(projectPath)
 
     // Check if it's a repo first
     const isRepo = await git.checkIsRepo()
