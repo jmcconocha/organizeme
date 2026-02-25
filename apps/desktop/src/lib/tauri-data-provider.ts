@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core"
+import { open } from "@tauri-apps/plugin-dialog"
 import type { DataProvider, RefreshResult, AppResult, TagResult } from "@organizeme/shared/types/data-provider"
 import type { AppSettings } from "@organizeme/shared/types/app-settings"
 import type { Project, ProjectListResponse } from "@organizeme/shared/types/project"
@@ -100,6 +101,19 @@ export const tauriDataProvider: DataProvider = {
       })
     } catch {
       return { projectsPath: '' }
+    }
+  },
+
+  browseForFolder: async (): Promise<string | null> => {
+    try {
+      const selected = await open({
+        directory: true,
+        multiple: false,
+        title: "Select Projects Folder",
+      })
+      return selected as string | null
+    } catch {
+      return null
     }
   },
 }

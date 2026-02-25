@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Settings, Check } from "lucide-react"
+import { Settings, Check, FolderOpen } from "lucide-react"
 
 import { Button } from "../ui/button"
 import {
@@ -61,6 +61,14 @@ export function DashboardSettingsDialog({ open, onOpenChange }: DashboardSetting
       setTimeout(() => setPathSaved(false), 2000)
     } finally {
       setPathSaving(false)
+    }
+  }
+
+  const handleBrowseFolder = async () => {
+    const selected = await dataProvider.browseForFolder()
+    if (selected) {
+      setProjectsPath(selected)
+      setPathSaved(false)
     }
   }
 
@@ -152,6 +160,15 @@ export function DashboardSettingsDialog({ open, onOpenChange }: DashboardSetting
                 placeholder="~/Documents/Projects"
                 className="flex-1"
               />
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleBrowseFolder}
+                className="shrink-0 h-9 w-9"
+                title="Browse for folder"
+              >
+                <FolderOpen className="h-4 w-4" />
+              </Button>
               <Button
                 variant="outline"
                 size="sm"

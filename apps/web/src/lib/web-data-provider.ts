@@ -20,6 +20,7 @@ import {
   getAllTags as getAllTagsAction,
   getAppSettings as getAppSettingsAction,
   updateAppSettings as updateAppSettingsAction,
+  browseForFolder as browseForFolderAction,
 } from "./actions"
 
 export const webDataProvider: DataProvider = {
@@ -57,4 +58,5 @@ export const webDataProvider: DataProvider = {
   updateAppSettings: async (updates: Partial<AppSettings>): Promise<AppSettings> => {
     return await updateAppSettingsAction(updates)
   },
+  browseForFolder: browseForFolderAction,
 }

@@ -241,6 +241,7 @@ async fn update_app_settings(projects_path: Option<String>) -> Result<config::Ap
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
             get_projects,
             get_project,

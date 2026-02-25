@@ -56,4 +56,6 @@ export interface DataProvider {
   getAppSettings(): Promise<AppSettings>
   /** Update application settings in config file */
   updateAppSettings(updates: Partial<AppSettings>): Promise<AppSettings>
+  /** Open a native folder picker dialog, returns selected path or null if cancelled */
+  browseForFolder(): Promise<string | null>
 }

@@ -585,3 +585,39 @@ export async function updateAppSettings(
     projectsPath: typeof existing.projectsPath === 'string' ? existing.projectsPath : '',
   }
 }
+
+/**
+ * Opens a native folder picker dialog and returns the selected path.
+ *
+ * Uses platform-specific commands:
+ * - macOS: osascript with 'choose folder'
+ * - Linux: zenity --file-selection --directory
+ *
+ * @returns Promise resolving to the selected folder path, or null if cancelled
+ */
+export async function browseForFolder(): Promise<string | null> {
+  const { exec } = await import('child_process')
+  const { promisify } = await import('util')
+  const execAsync = promisify(exec)
+
+  const platform = process.platform
+
+  try {
+    let command: string
+
+    if (platform === 'darwin') {
+      command = `osascript -e 'POSIX path of (choose folder with prompt "Select Projects Folder")'`
+    } else if (platform === 'win32') {
+      command = `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; $f = New-Object System.Windows.Forms.FolderBrowserDialog; $f.Description = 'Select Projects Folder'; if ($f.ShowDialog() -eq 'OK') { $f.SelectedPath } else { '' }"`
+    } else {
+      command = `zenity --file-selection --directory --title="Select Projects Folder" 2>/dev/null`
+    }
+
+    const { stdout } = await execAsync(command)
+    const path = stdout.trim()
+    return path.length > 0 ? path : null
+  } catch {
+    // User cancelled or command failed
+    return null
+  }
+}
